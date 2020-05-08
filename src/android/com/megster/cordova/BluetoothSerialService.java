@@ -1,6 +1,7 @@
 package com.megster.cordova;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
@@ -205,7 +206,7 @@ public class BluetoothSerialService {
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
-    public void write(byte[] out) {
+    public void write(String out) {
         // Create temporary object
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -476,12 +477,19 @@ public class BluetoothSerialService {
          * Write to the connected OutStream.
          * @param buffer  The bytes to write
          */
-        public void write(byte[] buffer) {
+        public void write(String textStr) {
             try {
-                mmOutStream.write(buffer);
+                byte[] send=null;
+                try {
+                    send = textStr.getBytes("GBK");
+                    //send = textStr.getBytes("UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    send = textStr.getBytes();
+                }
+                mmOutStream.write(send);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothSerial.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(BluetoothSerial.MESSAGE_WRITE, -1, -1, send).sendToTarget();
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

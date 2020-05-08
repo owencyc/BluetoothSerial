@@ -127,7 +127,8 @@ public class BluetoothSerial extends CordovaPlugin {
 
         } else if (action.equals(WRITE)) {
 
-            byte[] data = args.getArrayBuffer(0);
+            // String data = args.getArrayBuffer(0);
+            String data = args.getString(0);
             bluetoothSerialService.write(data);
             callbackContext.success();
 
