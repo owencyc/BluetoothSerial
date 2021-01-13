@@ -58,6 +58,21 @@ module.exports = {
 
         cordova.exec(success, failure, "BluetoothSerial", "write", [data]);
     },
+	
+	write2: function (data, success, failure) {
+
+        //convert to ArrayBuffer
+        if (typeof data === 'string') {
+            data = stringToArrayBuffer(data);
+        } else if (data instanceof Array) {
+            // assuming array of interger
+            data = new Uint8Array(data).buffer;
+        } else if (data instanceof Uint8Array) {
+            data = data.buffer;
+        }
+
+        cordova.exec(success, failure, "BluetoothSerial", "write2", [data]);
+    },
 
     // calls the success callback when new data is available
     subscribe: function (delimiter, success, failure) {
